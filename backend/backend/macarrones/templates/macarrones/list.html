@@ -1,0 +1,29 @@
+{% extends "macarrones/base.html" %}
+{% block content %}
+
+<h1 class="text-center">Productos</h1>
+
+{% if user.is_authenticated %}
+<form class="text-center" action="{% url 'macarrones:list' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="border bg-cyan-600"> Publish your product!</button>
+</form>
+
+<ul>
+    {% for product in product_list %}
+     <li>
+        <strong>{{ product.name}} </strong> - {{ product.category }} - {{product.price }} €
+        <p>{{ product.description }} </p>
+        <small>Publicado por: {{ product.user.username }}</small>
+     </li>
+
+     {% empty %}
+     <li class="text-center">NO HAY PRODUCTOS AUN </li>
+     {% endfor %}
+
+     {% else %}
+     <p class="text-center">Debes iniciar sesion para ver esta pagina</p>
+     {% endif %}
+
+{% endblock%}

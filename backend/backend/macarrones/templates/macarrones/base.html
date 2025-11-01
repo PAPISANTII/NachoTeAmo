@@ -1,0 +1,72 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        {% block title %}
+        Santiago Piray
+        {% endblock title%}
+    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% tailwind_css %}
+    
+</head>
+
+<body class="bg-amber-100 text-black dark:bg-gray-950 dark:text-indigo-50 font-serif h-screen">
+
+    <nav class="bg-gray-900 text-gray-100 flex justify-center p-4 space-x-6">
+        <img class= "absolute top-0 left-0 size-15" src="https://i.etsystatic.com/32291671/r/il/349898/4213960060/il_1080xN.4213960060_56cs.jpg">
+        <a href="{% url 'macarrones:home' %}" class="hover:underline"> Home page </a>
+        <a href="{% url 'macarrones:macarrones' %}" class="hover:underline"> App page </a>
+        <button id="btnLight" class="hidden dark:inline-block bg-sky-500 cursor-pointer rounded-full p-0.5 text-yellow-300 absolute top-5 right-5">
+            <div class="w-5 h-5">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"></path></svg>
+            </div>
+        </button>
+        <button id="btnDark" class=" inline-block dark:hidden bg-sky-900 cursor-pointer rounded-full p-0.5 text-white-300 absolute top-5 right-4">
+            <div class="w-5 h-5">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.3807 2.01886C9.91573 3.38768 9 5.3369 9 7.49999C9 11.6421 12.3579 15 16.5 15C18.6631 15 20.6123 14.0843 21.9811 12.6193C21.6613 17.8537 17.3149 22 12 22C6.47715 22 2 17.5228 2 12C2 6.68514 6.14629 2.33869 11.3807 2.01886Z"></path></svg>
+            </div>
+        </button>
+        
+        {% if user.is_authenticated %}
+            <div class="text-right">
+                 <a class="mr-4" href="{% url 'macarrones:list' %}"> Productos </a>
+            </div>
+
+         {% endif %}
+
+        <div class="flex items-center gap-x-4">
+        {% if user.is_authenticated %}
+        <p>Conectado como: {{ user.username }}</p>
+        <form action="{% url 'users:logout' %}" method="post" class="flex items-center">
+            {% csrf_token %}
+            <button type ="submit" class="hover:underline hover:pointer left-1">Cerrar Sesion</button>
+        </form>
+        {% else %}
+        <a href="{% url 'users:login' %}" class="hover:underline">Login</a>
+        <a href="{% url 'users:register' %}" class="hover:underline">Registro</a>
+        {% endif %}
+    </div>
+    
+    </nav>
+
+    <main class="container mx-auto mt-8 p-4">
+
+        {% block content %}
+
+        <p>contenido de home</p>
+
+        {% endblock %}
+
+    </main>
+
+    <footer class="flex items-center justify-center bottom-10.0 ">
+        by Santiago Piray ❤️
+    </footer>
+    
+
+</body>
+</html>

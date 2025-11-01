@@ -1,0 +1,15 @@
+ {% extends "macarrones/base.html" %}
+    {% load static %}
+
+    {% block content%}
+    <h1>Register form!!</h1>
+    <form method="post" action="{% url 'users:register' %}">
+
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="border bg-cyan-600">Submit</button>
+    </form>
+
+    {% endblock %}
+
+ 

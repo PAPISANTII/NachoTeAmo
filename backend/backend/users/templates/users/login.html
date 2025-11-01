@@ -1,0 +1,16 @@
+{% extends "macarrones/base.html" %}
+{% load static %} 
+
+{%block title %} login {% endblock %}
+
+{% block content %}
+<h1 class="text-3xl text-center underline"> INICIAR SESION </h1>
+<form class="text-center mt-6" action ="{% url 'users:login' %} " method = "post">
+    {% csrf_token %}
+    {{ form }}
+    {% if request.GET.next %}
+    <input type="hidden" name="next" value="{{ request.GET.next}}">
+    {% endif %}
+    <button type ="submit" class="bg-blue-600 text-white rounded flex-1">ENTRAR </button>
+</form>
+{% endblock %}

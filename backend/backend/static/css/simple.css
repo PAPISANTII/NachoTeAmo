@@ -1,0 +1,32 @@
+body {
+    
+    background-color: antiquewhite;
+    align-content: center;
+    
+
+    
+}
+
+.centrado {
+    
+    text-align: center;
+
+}
+
+h1 {
+    background-color: rgba(236, 184, 31, 0.905);
+    color: peru;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+.name {
+    font-style: oblique;
+    background-color: rgb(84, 143, 231);
+    
+}
+
+img {
+
+    border-radius: 20px;
+}

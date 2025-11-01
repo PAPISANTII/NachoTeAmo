@@ -1,0 +1,18 @@
+{% extends "macarrones/base.html" %}
+
+{% block content %}
+<div class= "text-center p-10">
+    <h1 class="text3x1 font-blod">{{ person.name}}</h1>
+    <p class="mt-4 text-lg">Fecha de nacimiento: {{person.birth}}</p>
+    <p class="italic mt-2">Slug: {{person.slug}}</p>
+
+    {% if person.propic %}
+    <img src="{{ person.propic.url }}" alt="{{ person.name }}" class="mx-auto mt-4 rounded-lg w-50 h-50">
+    {% else %}
+    <p class= "mt-2 text-gray-500">Sin imagen disponible</p>
+    {% endif %}
+    
+    <a href ="{% url 'macarrones:home' %}" class="text-blue-500 underline mt-4 block">Volver al inicio</a>
+</div>
+
+{% endblock %}
