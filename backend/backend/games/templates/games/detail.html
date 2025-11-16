@@ -33,4 +33,31 @@
     {% endif %}
 </div>
 
+{{ game.room_name |json_script:"room_data_json" }}
+<script>
+    const usable_data = JSON.parse(document.getElementById('room_data_json').textContent);
+</script>
+
+<script>
+    const roomName = "{{ game.room_name }}";
+    const gameSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/tictactoe/' + roomName + '/'
+    );
+
+    gameSocket.onopen = function(e) {
+        console.log("Connected to socket.");
+    };
+
+    gameSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data).my_data;
+        console.log("New Message Received");
+    };
+</script>
+<div class="mt-4 flex justify-center">
+    <button class="bg-blue-300 border hover:bg-blue-600" onclick="gameSocket.send(JSON.stringify({'message': 'Prueba desde frontend'}))"> Enviar mensaje de prueba </button>
+</div>
+
+
 {% endblock %}
+

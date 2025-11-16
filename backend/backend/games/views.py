@@ -18,21 +18,22 @@ def game_detail(request, room_name):
     game = get_object_or_404(Game, room_name=room_name)
     board = list(game.board)
     
+    if game.player2 is None and request.user != game.owner:
+        game.player2 = request.user
+        game.save()
+    
     if request.method == "POST" and not game.over:
         square = int(request.POST.get("square"))
-        if board[square] == "-":
-            board[square] = "x" if game.active_player == 1 else "0"
-            game.board = "".join(board)
-            
-            winner = check_winner(board)
+        success = game.make_move(request.user, square)
+        if success:
+            winner = check_winner(list(game.board))
             if winner:
-                game.winner ="Jugador 1" if game.active_player == 1 else "Jugador 2"
+                game.winner = "Jugador 1" if request.user == game.owner else "Jugador 2"
                 game.over = True
-            else:
-                game.active_player = 2 if game.active_player == 1 else 1
+                game.save()
             
-            game.save()
-    return render(request, 'games/detail.html', {'game': game, 'board':board})
+        board = list(game.board)
+    return render(request, 'games/detail.html', {'game':game, 'board':board})
 
 def check_winner(board):
     win_patterns = [
