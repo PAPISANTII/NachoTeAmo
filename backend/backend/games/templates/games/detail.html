@@ -5,32 +5,31 @@
     <h1 class="text-2xl font-bold mb-2">Partida: {{ game.room_name }}</h1>
     <p class="mb-6">Jugador actual: {{ game.active_player }}</p>
 
-    <form method="POST" class="inline-block">
+    <form id="game_board" class="inline-block">
         {% csrf_token %}
         <div class="grid grid-cols-3 gap-2 w-48 mx-auto">
             {% for i in board %}
                 <button 
-                    type="submit"
+                    type="button"
                     name="square" 
                     value="{{ forloop.counter0 }}" 
-                    class="border-2 border-gray-800 w-16 h-16 flex items-center justify-center text-2xl font-bold bg-white hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                    class="border-2 border-gray-800 w-16 h-16 flex items-center justify-center text-2xl font-bold bg-white hover:bg-gray-200 dark:bg-gray-800 dark:text-white move-btn">
                     {{ i }}
                 </button>
             {% endfor %}
         </div>
     </form>
 
-    {% if game.over %}
-        <p class="text-green-600 font-bold">Ganador: {{ game.winner }}</p>
-        
+    <p id="winnerMsg" class="text-green-600 font-bold">Ganador: {{ game.winner }}</p>
+    
+    <div id="deletePanel" class="mt-4" style="display: none;">
         <form method="POST" action="{% url 'games:delete_game' game.room_name %}" class = "mt-4">
           {% csrf_token %}
           <button type="submit" class= "bg-red-400 text-white px-3 py-1 rounded">
             Eliminar partida
           </button>
-
         </form>
-    {% endif %}
+    </div>
 </div>
 
 {{ game.room_name |json_script:"room_data_json" }}
@@ -39,6 +38,7 @@
 </script>
 
 <script>
+    const user_id = {{ user_id }};
     const roomName = "{{ game.room_name }}";
     const gameSocket = new WebSocket(
         'ws://' + window.location.host +
@@ -50,10 +50,42 @@
     };
 
     gameSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data).my_data;
-        console.log("New Message Received");
+        const received = JSON.parse(e.data);
+        if (received.game_state) {
+            
+            const boardArr = received.game_state.board.split('');
+            document.querySelectorAll('.move-btn').forEach((btn, i) => {
+                btn.textContent = boardArr[i];
+            });
+            
+            document.querySelector('.mb-6').textContent = "Jugador actual: " + received.game_state.active_player;
+            
+            if (received.game_state.over) {
+                document.getElementById('winnerMsg').textContent = "Ganador: " + received.game_state.winner;
+                document.getElementById('deletePanel').style.display = 'block';
+            } else {
+                document.getElementById('winnerMsg').textContent = " ";
+                document.getElementById('deletePanel').style.display = 'none';
+            }
+            console.log("Nuevo estado recibido: ", received.game_state);
+        };
     };
+
+    document.querySelectorAll('.move-btn').forEach(btn => {
+    btn.onclick = function(e) {
+        e.preventDefault();
+        if (gameSocket.readyState === WebSocket.OPEN) {
+            gameSocket.send(JSON.stringify({
+                'move': btn.value,
+                'user': user_id
+            }));
+        } else {
+            alert("Conexión perdida con el servidor. Recarga la página.");
+        }
+        };
+    });
 </script>
+
 <div class="mt-4 flex justify-center">
     <button class="bg-blue-300 border hover:bg-blue-600" onclick="gameSocket.send(JSON.stringify({'message': 'Prueba desde frontend'}))"> Enviar mensaje de prueba </button>
 </div>

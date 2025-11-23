@@ -33,7 +33,7 @@ def game_detail(request, room_name):
                 game.save()
             
         board = list(game.board)
-    return render(request, 'games/detail.html', {'game':game, 'board':board})
+    return render(request, 'games/detail.html', {'game': game, 'board': board, 'user_id': request.user.id})
 
 def check_winner(board):
     win_patterns = [
