@@ -1,0 +1,13 @@
+{% extends "macarrones/base.html" %}
+
+{% block content %}
+  <h1 class="text-2xl font-bold mb-4 justify-center">Random Dog desde API externa</h1>
+
+  <p class="mb-4">Status: {{ status }}</p>
+
+  {% if image_url %}
+    <img src="{{ image_url }}" alt="Random dog" class="max-w-md mx-auto rounded shadow">
+  {% else %}
+    <p>No image received from API.</p>
+  {% endif %}
+{% endblock %}

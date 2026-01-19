@@ -27,8 +27,5 @@ urlpatterns = [
  path('users/', include('users.urls', namespace='users')),
  path('games/', include('games.urls')),
  path("api/", include("api.urls")),
- 
-]
-
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+ path("dogs/", include("dogs.urls")),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

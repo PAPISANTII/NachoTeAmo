@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'games',
     'rest_framework',
     'api',
+    'dogs',
     
 ]
 
