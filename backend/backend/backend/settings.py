@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+from decouple import config 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'daphne',
     'channels',
+    'decouple',
     'django.contrib.staticfiles',
     'macarrones',
     'tailwind',
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'dogs',
+    'chatbot',
     
 ]
 
@@ -153,3 +156,5 @@ CHANNEL_LAYERS = {
         },
     },      
 }
+
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')

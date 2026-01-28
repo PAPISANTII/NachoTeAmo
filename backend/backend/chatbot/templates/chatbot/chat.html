@@ -1,0 +1,29 @@
+{% extends "macarrones/base.html" %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto p-8">
+  <h1 class="text-3xl font-bold mb-8">Chatbot con Gemini AI</h1>
+  
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700">
+      Enviar a Gemini
+    </button>
+  </form>
+  
+  {% if response %}
+    <div class="mt-8 p-6 bg-green-100 rounded-lg border-l-4 border-green-500">
+      <h3 class="font-semibold mb-2">Respuesta de Gemini:</h3>
+      <p>{{ response|linebreaks }}</p>
+    </div>
+  {% endif %}
+  
+  {% if error %}
+    <div class="mt-8 p-6 bg-red-100 rounded-lg border-l-4 border-red-500">
+      <h3 class="font-semibold mb-2">Error:</h3>
+      <p>{{ error }}</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
